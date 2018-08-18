@@ -14,6 +14,7 @@ from .logging import logger
 from .exceptions import WebSocketAuthenticationError
 from .lol import where_is
 from os import path
+from .luis import order
 
 PJ = os.path.join
 this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -94,11 +95,13 @@ async def handle_websocket(ws_queue, speaker_queue):
         out = await asyncio.ensure_future(wait_for_ws())
 
         print("out: " + out)
-        ans = where_is(out)
-        if ans is None:
+        word = await order(out)
+        print("luis.ai: " + word)
+        ans = where_is(word)
+        if ans is None or word is None:
             ans = "抱歉，聽不懂！"
         else:
-            ans = out + '在第' + ans + '號攤位。'
+            ans = word + '在第' + ans + '號攤位。'
         print("ans: " + ans)
 
         base_dir = path.abspath(path.dirname(__file__))
