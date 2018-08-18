@@ -96,9 +96,9 @@ async def handle_websocket(ws_queue, speaker_queue):
         print("out: " + out)
         ans = where_is(out)
         if ans is None:
-            ans = "聽不懂"
+            ans = "抱歉，聽不懂！"
         else:
-            ans += "樓"
+            ans = out + '在第' + ans + '號攤位。'
         print("ans: " + ans)
 
         base_dir = path.abspath(path.dirname(__file__))
