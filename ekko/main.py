@@ -13,6 +13,7 @@ from ._recorder import simple_recorder
 from .logging import logger
 from .exceptions import WebSocketAuthenticationError
 from .lol import where_is
+from os import path
 
 PJ = os.path.join
 this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -99,6 +100,11 @@ async def handle_websocket(ws_queue, speaker_queue):
         else:
             ans += "樓"
         print("ans: " + ans)
+
+        base_dir = path.abspath(path.dirname(__file__))
+        file_name = path.join(base_dir, '../data.db')
+        with open(file_name, 'a') as new_file:
+            new_file.write(out + '\n')
 
         with open(PJ(this_dir, 'res/response.mp3'), 'rb') as fd:
             simple_player.play_bytes(fd)
