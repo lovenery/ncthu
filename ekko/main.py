@@ -12,7 +12,7 @@ from ._player import simple_player
 from ._recorder import simple_recorder
 from .logging import logger
 from .exceptions import WebSocketAuthenticationError
-
+from .lol import where_is
 
 PJ = os.path.join
 this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -42,7 +42,6 @@ async def ws_to_tts(speaker_queue, lang='zh-tw'):
         simple_player.play_bytes(tempf)
     led.set_state(led.OFF)
     return 0
-
 
 async def record_to_buffer(ws_queue):
     logger.info('Recording from microphone.')
@@ -92,9 +91,18 @@ async def handle_websocket(ws_queue, speaker_queue):
 
         asyncio.ensure_future(wait_for_queue())
         out = await asyncio.ensure_future(wait_for_ws())
+
+        print("out: " + out)
+        ans = where_is(out)
+        if ans is None:
+            ans = "聽不懂"
+        else:
+            ans += "樓"
+        print("ans: " + ans)
+
         with open(PJ(this_dir, 'res/response.mp3'), 'rb') as fd:
             simple_player.play_bytes(fd)
-        await speaker_queue.put(out)
+        await speaker_queue.put(ans)
         logger.info('STT result: %s' % out)
 
 
