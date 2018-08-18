@@ -97,11 +97,12 @@ async def handle_websocket(ws_queue, speaker_queue):
         print("out: " + out)
         word = await order(out)
         print("luis.ai: " + word)
-        ans = where_is(word)
-        if ans is None or word is None:
+        number, price = where_is(word)
+        ans = ''
+        if number is None or word is None:
             ans = "抱歉，聽不懂！"
         else:
-            ans = word + '在第' + ans + '號攤位。'
+            ans = word + '在第' + number + '號攤位，大概是' + price + '元。'
         print("ans: " + ans)
 
         base_dir = path.abspath(path.dirname(__file__))

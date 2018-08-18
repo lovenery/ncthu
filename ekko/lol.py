@@ -7,9 +7,7 @@ def where_is(name):
     result = df[df['name'].str.contains(name)]
     if result.empty:
         return None
-    floor = result['number'].values[0]
-    return str(floor)
+    number = result['number'].values[0]
+    price = result['price'].values[0]
+    return str(number), str(price)
 
-# Test
-# print(where_is('臭豆腐'))
-# print(where_is('雞蛋糕'))
