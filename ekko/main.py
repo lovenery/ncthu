@@ -93,11 +93,17 @@ async def handle_websocket(ws_queue, speaker_queue):
 
         asyncio.ensure_future(wait_for_queue())
         out = await asyncio.ensure_future(wait_for_ws())
-
         print("out: " + out)
+
+        # AI
+        number = 0
+        price = 0
         word = await order(out)
-        print("luis.ai: " + word)
-        number, price = where_is(word)
+        if word is not None:
+            print("luis.ai: " + word)
+            number, price = where_is(word)
+        
+        # Speak
         ans = ''
         if number is None or word is None:
             ans = "抱歉，聽不懂！"
@@ -105,6 +111,7 @@ async def handle_websocket(ws_queue, speaker_queue):
             ans = word + '在第' + number + '號攤位，大概是' + price + '元。'
         print("ans: " + ans)
 
+        # DB
         base_dir = path.abspath(path.dirname(__file__))
         file_name = path.join(base_dir, '../data.db')
         with open(file_name, 'a') as new_file:

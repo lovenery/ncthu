@@ -6,7 +6,7 @@ def where_is(name):
     df = pd.read_csv(path.join(base_dir, './data.csv'))
     result = df[df['name'].str.contains(name)]
     if result.empty:
-        return None
+        return None, None
     number = result['number'].values[0]
     price = result['price'].values[0]
     return str(number), str(price)
